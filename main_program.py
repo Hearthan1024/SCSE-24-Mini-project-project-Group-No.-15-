@@ -1,6 +1,6 @@
 from analysis_module import DataInspection, DataAnalysis, SentimentAnalysis
 
-# 主程序
+
 def main():
     di = DataInspection()
 
@@ -35,14 +35,13 @@ def main():
                 try:
                     var_index = int(var_choice) - 1
 
-                    # 检查用户选择的变量编号是否有效
                     if 0 <= var_index < len(di.df.columns):
                         variable = di.df.columns[var_index]
-                        di.plot_distribution(variable)  # 根据选择的变量生成图表
+                        di.plot_distribution(variable) 
                     elif var_choice == str(len(di.df.columns) + 1):
-                        break  # 返回上一级菜单
+                        break  
                     elif var_choice == str(len(di.df.columns) + 2):
-                        exit()  # 退出程序
+                        exit() 
                     else:
                         print("Invalid choice. Please try again.")
                 except (ValueError, IndexError):
@@ -67,8 +66,7 @@ def main():
             
         elif choice == '4':
             print("\nAvailable categorical variables for Chi-Square Test:")
-            categorical_vars = analysis.show_categorical_variables()  # 确保调用正确的方法
-
+            categorical_vars = analysis.show_categorical_variables()
             var1 = input("Enter the first variable: ")
             var2 = input("Enter the second variable: ")
 
@@ -93,12 +91,10 @@ def main():
             
         elif choice == '6':
             print("\nLooking for text data in your dataset...")
-    
-            # 查找文本列
+
             text_columns = df.select_dtypes(include=['object']).columns
     
             if len(text_columns) == 0:
-                # 没有合适的文本数据
                 print("Sorry, your dataset does not have a suitable length text data.")
                 print("Therefore, Sentiment Analysis is not possible.")
                 print("Returning to previous menu...")
@@ -113,18 +109,15 @@ def main():
                 print("Invalid column name! Please try again.")
                 continue
 
-            # 选择情感分析方法
             print("Choose the type of sentiment analysis:")
             print("1. VADER (for short texts)")
             print("2. TextBlob (provides Polarity and Subjectivity)")
             print("3. DistilBERT (requires transformers library)")
             analysis_method = input("Enter your choice (1, 2, or 3): ")
 
-            # 执行分析并获取结果
             result_df = sentiment.analyze(column_name, analysis_method)
 
             if result_df is not None:
-                # 可以根据需要保存结果或执行其他操作
                 save_choice = input("Do you want to save the results to a CSV file? (y/n): ")
                 if save_choice.lower() == 'y':
                     result_df.to_csv(f"sentiment_analysis_{column_name}.csv", index=False)
